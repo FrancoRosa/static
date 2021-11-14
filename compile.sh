@@ -5,24 +5,35 @@ echo ''
 echo '... compile'
 echo ''
 
-arduino-cli compile \
---fqbn STMicroelectronics:stm32:GenF1:pnum=BLUEPILL_F103C6,\
-upload_method=swdMethod,xserial=generic,usb=CDCgen,xusb=FS,opt=osstd,dbg=none,rtlib=nano \
-stm32 --build-path build  
+arduino-cli compile --fqbn stm32duino:STM32F1:genericSTM32F103C6:upload_method=STLinkMethod,cpu_speed=speed_48mhz,opt=osstd static --build-path build 
 
-compile_time=$(date +%s.%3N)
-elapsed=$(echo "scale=3; $compile_time - $start_time" | bc)
-echo '... compiled, elapsed time:' $elapsed 'ms'
+SUCCESS=$?
+RESPONSE=0
 
-echo ''
-echo '... upload  '
-echo ''
+if [ "$SUCCESS" == "$RESPONSE" ]
+then
+  compile_time=$(date +%s.%3N)
+  elapsed=$(echo "scale=3; $compile_time - $start_time" | bc)
+  echo '... compiled, elapsed time:' $elapsed 'ms'
 
-sudo st-flash --hot-plug write build/stm32.ino.bin 0x08000000 
-sudo st-flash reset 
+  echo ''
+  echo '... upload  '
+  echo ''
 
-end_time=$(date +%s.%3N)
-elapsed=$(echo "scale=3; $end_time - $start_time" | bc)
-echo ''
-echo '... done, elapsed time:' $elapsed 'ms'
-echo ''
+  sudo st-flash --hot-plug write build/static.ino.bin 0x08000000 
+  sudo st-flash reset 
+
+  end_time=$(date +%s.%3N)
+  elapsed=$(echo "scale=3; $end_time - $start_time" | bc)
+  echo ''
+  echo '... done, elapsed time:' $elapsed 'ms'
+  echo ''
+else
+  compile_time=$(date +%s.%3N)
+  elapsed=$(echo "scale=3; $compile_time - $start_time" | bc)
+  echo '... compiled, elapsed time:' $elapsed 'ms'
+
+  echo ''
+  echo '... compile failed  '
+  echo ''
+fi
