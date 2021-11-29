@@ -175,6 +175,10 @@ void loop()
         displayValues();
         dispFlag = false;
     }
+    Serial.print(digitalRead(sten));
+    Serial.print(digitalRead(stdir));
+    Serial.print(digitalRead(stpul));
+    Serial.println();
 }
 
 void readinputs()
@@ -382,12 +386,12 @@ void enableStep()
 
 void dirLeft()
 {
-    digitalWrite(stdir, HIGH);
+    digitalWrite(stdir, LOW);
 }
 
 void dirRight()
 {
-    digitalWrite(stdir, LOW);
+    digitalWrite(stdir, HIGH);
 }
 
 void returntohome()
@@ -506,7 +510,7 @@ void one_ms()
             if (uCounter > stepSpeed)
             {
                 stepCounter--;
-                digitalWrite(stpul, LOW);
+                digitalWrite(stpul, HIGH);
                 digitalWrite(ledpin, LOW);
                 uCounter = 0;
             }
@@ -525,7 +529,7 @@ void one_ms()
             uCounter++;
             dirRight();
             enableStep();
-            digitalWrite(stpul, HIGH);
+            digitalWrite(stpul, LOW);
             digitalWrite(ledpin, HIGH);
             if (uCounter > stepSpeed)
             {
