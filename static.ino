@@ -1,6 +1,6 @@
 #include "src/HX711/HX711.h"
 
-// Leds
+// leds
 #define l_pin PC13
 #define l_man PB14
 #define l_mov PB13
