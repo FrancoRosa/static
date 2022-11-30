@@ -41,6 +41,8 @@ volatile int t_total = 0;
 volatile int t_eff = 0;
 volatile int t_rest = 0;
 volatile float effort = 0;
+volatile float off1 = 0;
+volatile float off2 = 0;
 
 // counters
 volatile int disp_count = 0; // each 500ms to show values on display
@@ -121,8 +123,12 @@ void serial_config() {
 
 void scale_config() {
   scale.begin(sda, sck, 128);
+  scale.set_gain(128);
   scale.set_scale(8800);
-  scale.tare();
+  off1 = scale.get_units(3);
+  scale.set_gain(32);
+  scale.set_scale(2200);
+  off2 = scale.get_units(3);
 }
 
 int sensor_active(int pin) { return !digitalRead(pin); }
@@ -156,7 +162,17 @@ void loop() {
   }
 }
 
-void read_scales() { effort = scale.get_units(5); }
+void read_scales() {
+  if (dir_flag) {
+    scale.set_gain(128);
+    scale.set_scale(8800);
+    effort = scale.get_units(3) - off1;
+  } else {
+    scale.set_gain(32);
+    scale.set_scale(2200);
+    effort = scale.get_units(3) - off2;
+  }
+}
 
 void display_values() {
   Serial3.print(t_total);
@@ -409,18 +425,19 @@ void one_ms() {
   case st_origin:
     switch (origin) {
     case going_up:
-      move_up();
       if (sensor_active(s_top)) {
         origin = going_mid;
-      }
-      if (sensor_active(s_origin)) {
+      } else if (sensor_active(s_origin)) {
         state = st_idle;
+      } else {
+        move_up();
       }
       break;
     case going_mid:
-      move_down();
       if (sensor_active(s_origin)) {
         state = st_idle;
+      } else {
+        move_down();
       }
       break;
     default:
@@ -461,7 +478,7 @@ void one_ms() {
               disable_motor();
             }
           } else {
-            if (-effort < conf_effort) {
+            if (effort < conf_effort) {
               move_down();
             } else {
               disable_motor();
@@ -470,15 +487,25 @@ void one_ms() {
         }
         break;
       case run_rest:
-        if (t_rest > conf_t_rest) {
+        if (t_rest > conf_t_rest && sensor_active(s_origin)) {
           running = run_effort;
           t_rest = 0;
           t_eff = 0;
+
           if (conf_alt) {
             dir_flag = !dir_flag;
           }
+          disable_motor();
         }
-        disable_motor();
+        if (!sensor_active(s_origin)) {
+          if (dir_flag) {
+            move_down();
+          } else {
+            move_up();
+          }
+        } else {
+          disable_motor();
+        }
         break;
       default:
         break;
