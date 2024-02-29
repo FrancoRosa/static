@@ -5,7 +5,7 @@
 # Circuito electronico
 El circuito esta compuesto por una fuente de alimentacion de 24V que es utilizada para alimentar el driver del motor y una placa que contiene la circuiteria que incluye el microcontrolador, el dispositivo bluetooth y el adaptador de la celda de carga. El archivo que contiene el diagrama se encuentra  en `EjercicioEstatico.pdsprj`, a continuacion se colocan imagenes referenciales  
 
-![Alt text](./img/circuit.png.png)
+![Alt text](./img/circuit.png)
 ![Alt text](./img/pcb.png)
 
 ## Componentes utilizados
