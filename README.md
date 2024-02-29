@@ -3,6 +3,23 @@
 > Este repositorio contiente informacion para la implementacion de una maquina de ejercio estatico.
 
 # Circuito electronico
+El circuito esta compuesto por una fuente de alimentacion de 24V que es utilizada para alimentar el driver del motor y una placa que contiene la circuiteria que incluye el microcontrolador, el dispositivo bluetooth y el adaptador de la celda de carga. El archivo que contiene el diagrama se encuentra  en `EjercicioEstatico.pdsprj`, a continuacion se colocan imagenes referenciales  
+
+![Alt text](./img/circuit.png.png)
+![Alt text](./img/pcb.png)
+
+## Componentes utilizados
+A continuacion se colocan algunos links referenciales de los componentes utilizados en el circuito.
+
+`Dispositivo Bluetooth`: https://naylampmechatronics.com/inalambrico/43-modulo-bluetooth-hc05.html
+
+`Transmisor de celda de carga`: https://naylampmechatronics.com/fuerza-peso/147-modulo-hx711-transmisor-de-celda-de-carga.html
+
+`Puente H`: https://naylampmechatronics.com/drivers/590-driver-puente-h-bts7960-43a.html
+
+`Actuador lineal`: https://es.aliexpress.com/item/1005006225654918.html?spm=a2g0o.productlist.main.9.2e732ac0sFy4uj&algo_pvid=0df114d6-98c2-4b8b-967c-5848da987256&aem_p4p_detail=202402290921541402976749088250000199437&utparam-url=scene%3Asearch%7Cquery_from%3A&search_p4p_id=202402290921541402976749088250000199437_1
+
+`Celda de carga de 500Kg`: https://es.aliexpress.com/item/1005006457480870.html?spm=a2g0o.productlist.main.1.5478657eVRNanO&algo_pvid=77e6ce9d-28d8-4f2b-8936-49a7fcb54bcd&utparam-url=scene%3Asearch%7Cquery_from%3A
 
 # Codigo de microcontrolador
 La logica de control se encuentra en el archivo `static.ino` , el microcontrolador utilizado es un STM32F103 conocido como `bluepill` el codigo tiene como dependencia una libreria para la lectura de celdas de carga ubicada en la carpeta `src/HX711` para compilar cualquier cambio realizado en el codigo se puede usar el comando `bash compile.sh`
@@ -77,10 +94,11 @@ Si la conexion fue satisfactoria, la aplicacion mostrara una vista que contiente
 
 ### Vista principal
 
-![Alt text](./img/principal.jpeg)
-Precione `Inicio` para iniciar el ejercicio.
-Precione `Reinicio` para reiniciar el ejercicio.
-Precione `Tara` para realizar la calibracion de la celda de carga y configurar el valor actual como zero.
+<img src="./img/principal.jpeg" width="400">
+
+Presione `Inicio` para iniciar el ejercicio.
+Presione `Reinicio` para reiniciar el ejercicio.
+Presione `Tara` para realizar la calibracion de la celda de carga y configurar el valor actual como zero.
 
 Los botones `<<<` `Origen` `>>>` se utilizan para el control manual del actuador lineal
 
@@ -89,7 +107,8 @@ Los textos `Tiempo Total, Tiempo esfuerzo, Tiempo descanso y Esfuerzo` indican l
 El boton `Salir` cierra el programa y desconecta la comunicacion con el circuito electronico
 
 ### Vista configuracion
-![Alt text](./img/config.jpeg)
+
+<img src="./img/config.jpeg" width="400">
 
 En esta vista se ajustan los tiempos para el esfuerzo y el descanso en la aplicacion, el tiempo total es el tiempo que la maquina esta en funcionamiento, la maquina se detendra cuando haya transcurrido el tiempo total.
 
